@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import myAxios from '../myAxios';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,9 +14,7 @@ const PokemonList = () => {
   const [list, setList, pagination, setPagination] =
     useContext(PokemonListContext);
 
-  // const [items, setList] = useState([]);
   useEffect(() => {
-    console.log(list.length);
     if (list.length === 0) {
       getData();
     }
@@ -41,7 +39,6 @@ const PokemonList = () => {
     await getData(url);
   };
   const onClickPokemon = (data) => {
-    console.log(data);
     navigate(URL.POKEMON_DETAIL(data.id));
   };
   return (

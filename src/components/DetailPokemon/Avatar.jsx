@@ -19,11 +19,13 @@ const Number = styled.p`
   margin-bottom: 20px;
 `;
 
-const ContainerImg = styled.div``;
+const ContainerImg = styled.div`
+  position: relative;
+  z-index: 0;
+`;
 const Image = styled.img`
   width: 100%;
   height: 180px;
-  z-index: 1;
 `;
 
 const WaveContainer = styled.div`
@@ -47,6 +49,11 @@ const Avatar = (props) => {
             damping: 20,
           }}>
           <Image src={props.data.sprites.other.dream_world.front_default} />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}>
           <WaveContainer>
             <Wave color={color} />
           </WaveContainer>

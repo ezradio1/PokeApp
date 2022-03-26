@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import PokeBall from '../assets/img/pokeball.png';
+import LoadingIcon from '../assets/icon/loading.svg';
 const Container = styled.div`
   background-color: #1678c2 !important;
   padding: 10px;
   height: 40px;
+  width: 40px;
   border-radius: 20px;
   background: #f44336;
   border: none;
@@ -16,6 +18,13 @@ const Container = styled.div`
   position: fixed;
   bottom: 65px;
   right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
 
   &:focus {
     transform: scale(1.1);
@@ -28,11 +37,19 @@ const Container = styled.div`
 const PokeBallImg = styled.img`
   width: 40px;
 `;
-const FloatingActionButton = () => {
+
+const LoadingImg = styled.img``;
+const FloatingActionButton = ({ onClick, loading }) => {
   return (
-    <Container>
-      <PokeBallImg src={PokeBall} />
-    </Container>
+    <>
+      <Container>
+        {!loading ? (
+          <PokeBallImg onClick={onClick} src={PokeBall} />
+        ) : (
+          <LoadingImg src={LoadingIcon} />
+        )}
+      </Container>
+    </>
   );
 };
 

@@ -1,66 +1,99 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import getColor from '../../const/getColor';
+import { motion } from 'framer-motion';
 
 const Table = styled.table`
   width: 100%;
-  border: 1px solid #e5e5e5;
   border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 1em;
 `;
 
-const Tr = styled.tr`
-  border-radius: 4px;
-`;
+const Tr = styled.tr``;
 
 const Th = styled.th`
+  background: #f8f7fb;
   width: 50%;
-  background-color: ${(props) => `${getColor(props.type)}`};
-  border-radius: 4px;
   height: 40px;
   color: #fff;
+  transition: 0.3s;
+  :first-child {
+    background-color: ${(props) =>
+      props.activeTab === 'default' ? `${getColor(props.type)}` : '#E7E6E9'};
+  }
+  :last-child {
+    background-color: ${(props) =>
+      props.activeTab === 'shiny' ? `${getColor(props.type)}` : '#E7E6E9'};
+  }
+
   :hover {
-    cursoer: pointer;
+    opacity: 0.7;
+    cursor: pointer;
   }
 `;
 
 const Td = styled.td`
+  background: #f8f7fb;
   text-align: center;
 `;
 const Image = styled.img``;
 const ChangePoke = (props) => {
-  const [state, setState] = useState('default');
+  const [activeTab, setActiveTab] = useState('default');
   const data = props.data.sprites;
-  console.log(data);
   const type = props.data.types[0].type.name;
-  console.log(type);
-
   const onChangePoke = (value) => {
-    setState(value);
+    setActiveTab(value);
   };
   return (
     <>
       <Table>
-        <tr>
-          <Th onClick={() => onChangePoke('default')} type={type}>
+        <Tr>
+          <Th
+            onClick={() => onChangePoke('default')}
+            type={type}
+            activeTab={activeTab}>
             Default
           </Th>
-          <Th onClick={() => onChangePoke('shiny')} type={type}>
+          <Th
+            onClick={() => onChangePoke('shiny')}
+            type={type}
+            activeTab={activeTab}>
             Shiny
           </Th>
-        </tr>
-        <tr>
+        </Tr>
+        <Tr>
           <Td>
-            {}
-            <Image
-              src={state === 'default' ? data.back_default : data.back_shiny}
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+              }}>
+              <Image
+                src={
+                  activeTab === 'default' ? data.back_default : data.back_shiny
+                }
+              />
+            </motion.div>
           </Td>
           <Td>
-            <Image
-              src={state === 'default' ? data.front_default : data.front_shiny}
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+              }}>
+              <Image
+                src={
+                  activeTab === 'default'
+                    ? data.front_default
+                    : data.front_shiny
+                }
+              />
+            </motion.div>
           </Td>
-        </tr>
+        </Tr>
       </Table>
     </>
   );

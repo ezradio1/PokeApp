@@ -17,6 +17,8 @@ const ButtonCustom = styled.div`
       ? '#1678c2'
       : props.type === 'secondary'
       ? '#eaae00'
+      : props.type === 'negative'
+      ? '#F70000'
       : '#dadada'};
   opacity: ${(props) => (props.disabled ? '0.5' : '1')};
   color: #fff;

@@ -1,22 +1,13 @@
 import React, { useContext } from 'react';
 import Button from './Button';
-import styled from '@emotion/styled';
+import Space from './Space';
 import { WidthContext } from '../context/WidthContext';
 
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
-`;
-
-const Separator = styled.div`
-  width: 8px;
-`;
 const Pagination = ({ prev, next, onClick }) => {
   const [matchesWidth] = useContext(WidthContext);
 
   return (
-    <Container>
+    <Space justify='flex-end'>
       <Button
         fluid={matchesWidth}
         type='primary'
@@ -24,14 +15,13 @@ const Pagination = ({ prev, next, onClick }) => {
         disabled={prev ? false : true}
         onClick={() => onClick(prev)}
       />
-      <Separator />
       <Button
         fluid={matchesWidth}
         type='primary'
         text='Next'
         onClick={() => onClick(next)}
       />
-    </Container>
+    </Space>
   );
 };
 

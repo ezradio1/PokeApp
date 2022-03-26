@@ -39,6 +39,17 @@ const Label = styled.div`
 const Statistic = (props) => {
   const data = props.data.stats;
   const type = props.data.types[0].type.name;
+  const statistic = [
+    data[0].base_stat,
+    data[1].base_stat,
+    data[2].base_stat,
+    data[3].base_stat,
+    data[4].base_stat,
+    data[5].base_stat,
+  ];
+
+  const max = Math.max(...statistic);
+  console.log(max);
   return (
     <>
       <Title>Base Statistic</Title>
@@ -49,7 +60,7 @@ const Statistic = (props) => {
           </Td>
           <Td>
             <Label>
-              <ProgressBar type={type} value={data[0].base_stat} />
+              <ProgressBar type={type} value={statistic[0]} max={max} />
             </Label>
           </Td>
         </Tr>
@@ -59,7 +70,7 @@ const Statistic = (props) => {
           </Td>
           <Td>
             <Label>
-              <ProgressBar type={type} value={data[1].base_stat} />
+              <ProgressBar type={type} value={statistic[1]} max={max} />
             </Label>
           </Td>
         </Tr>
@@ -69,7 +80,7 @@ const Statistic = (props) => {
           </Td>
           <Td>
             <Label>
-              <ProgressBar type={type} value={data[2].base_stat} />
+              <ProgressBar type={type} value={statistic[2]} max={max} />
             </Label>
           </Td>
         </Tr>
@@ -79,7 +90,7 @@ const Statistic = (props) => {
           </Td>
           <Td>
             <Label>
-              <ProgressBar type={type} value={data[3].base_stat} />
+              <ProgressBar type={type} value={statistic[3]} max={max} />
             </Label>
           </Td>
         </Tr>
@@ -89,7 +100,7 @@ const Statistic = (props) => {
           </Td>
           <Td>
             <Label>
-              <ProgressBar type={type} value={data[4].base_stat} />
+              <ProgressBar type={type} value={statistic[4]} max={max} />
             </Label>
           </Td>
         </Tr>
@@ -99,7 +110,7 @@ const Statistic = (props) => {
           </Td>
           <Td>
             <Label>
-              <ProgressBar type={type} value={data[5].base_stat} />
+              <ProgressBar type={type} value={statistic[5]} max={max} />
             </Label>
           </Td>
         </Tr>

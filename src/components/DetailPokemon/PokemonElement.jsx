@@ -19,9 +19,10 @@ const PokemonElement = (props) => {
       <ChipContainer>
         {props.data.map((e, key) => {
           return (
-            <>
+            <div key={key}>
               {key < 10 && (
                 <motion.div
+                  key={key}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: Number(key / 10) }}>
@@ -32,7 +33,7 @@ const PokemonElement = (props) => {
                   />
                 </motion.div>
               )}
-            </>
+            </div>
           );
         })}
       </ChipContainer>

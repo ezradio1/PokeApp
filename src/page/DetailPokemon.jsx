@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import myAxios from '../myAxios';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { WidthContext } from '../context/WidthContext';
+import { MyPokemonContext } from '../context/MyPokemonContext';
 import ArrowLeft from '../assets/icon/arrow-left.svg';
 
 //components
@@ -14,6 +15,10 @@ import Statistic from '../components/DetailPokemon/Statistic';
 import ChangePoke from '../components/DetailPokemon/ChangePoke';
 import FloatingActionButton from '../components/FloatingActionButton';
 import Button from '../components/Button';
+import Conffeti from '../components/Conffeti';
+import Modal from '../components/Modal';
+import InputCustom from '../components/InputCustom';
+import Space from '../components/Space';
 
 const Container = styled.div`
   display: grid;
@@ -24,20 +29,34 @@ const Container = styled.div`
     grid-template-columns: 1fr;
   }
   @media (min-width: 960px) {
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: 1fr 1.7fr;
   }
 `;
 
-const Col1 = styled.div`
-  // border: 1px solid black;
+const ButtonContainer = styled.div`
+  position: ${(props) => (props.isMobile ? 'fixed' : 'absolute')};
+  top: 80px;
+  top: ${(props) => (props.isMobile ? '13px' : '80px')};
+  z-index: ${(props) => (props.isMobile ? '1' : '0')};
 `;
-const Col2 = styled.div`
-  // border: 5px solid black;
+
+const ModalText = styled.div`
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 5px;
 `;
 
 const DetailPokemon = () => {
   const [matchesWidth] = useContext(WidthContext);
+  const [myPokemon, setMyPokemon] = useContext(MyPokemonContext);
+
   const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
+  const [isGetPokemon, setIsGetPokemon] = useState(false);
+  const [nickName, setNickName] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
   const { id } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
@@ -45,6 +64,8 @@ const DetailPokemon = () => {
       getData();
     }
   }, []);
+  const onFire = useRef(null);
+  const modalRef = useRef();
 
   const getData = async () => {
     await myAxios.get(`pokemon/${id}`).then((res) => {
@@ -53,37 +74,146 @@ const DetailPokemon = () => {
     });
   };
 
+  const onCheckUniqNickName = (nickName, currentData) => {
+    var check = currentData.filter((e) => {
+      return e.nickName === nickName;
+    });
+    return check.length === 0 ?? false;
+  };
+  const onSavePokemonToList = (data) => {
+    if (nickName === '') {
+      setErrorMsg(`You must enter a nickname!`);
+    } else {
+      console.log(data);
+      const checkUnique =
+        myPokemon.length > 0 ? onCheckUniqNickName(nickName, myPokemon) : true;
+      if (checkUnique) {
+        setErrorMsg('');
+        setLoadingModal(true);
+        setTimeout(() => {
+          var newData;
+          const savedData = {
+            name: data.name,
+            nickName: nickName,
+            img: data.sprites.other.dream_world.front_default,
+          };
+          newData = [...myPokemon, savedData];
+          setMyPokemon(newData);
+          localStorage.setItem('myPokemon', JSON.stringify(newData));
+          modalRef.current.close();
+          setLoadingModal(false);
+        }, 800);
+      } else {
+        setErrorMsg(`You've used this nickname before!`);
+      }
+    }
+  };
+  const onCatchPokemon = (item) => {
+    setErrorMsg('');
+    setLoading(true);
+    setNickName('');
+    setTimeout(() => {
+      // const getRandom = Math.floor(Math.random() * 2);
+      const getRandom = 1;
+      var data;
+      if (getRandom === 1) {
+        data = {
+          img: getRandom,
+          title: 'congratulation!',
+          buttonText: 'Save',
+          message: 'You have successfully obtained this item!',
+        };
+        onFire.current();
+      } else {
+        data = {
+          img: getRandom,
+          title: 'very sad!!',
+          buttonText: 'No, problem',
+          message: 'You failed to get this item!',
+        };
+      }
+      setIsGetPokemon(data);
+      modalRef.current.open();
+      setLoading(false);
+    }, 1500);
+  };
   return (
     <>
       {item !== null && (
         <div>
-          <Button
-            icon={ArrowLeft}
-            onlyIcon={true}
-            shape='circle'
-            onClick={() => navigate(-1)}
-          />
+          <ButtonContainer isMobile={matchesWidth}>
+            <Button
+              icon={ArrowLeft}
+              onlyIcon={true}
+              shape='circle'
+              onClick={() => navigate(-1)}
+            />
+          </ButtonContainer>
           <Container>
-            <Col1>
+            <div>
               <>
                 <Avatar data={item} />
                 <InfoDetail data={item} />
-                {/* <ChangePoke data={item} /> */}
+                <br />
+                <ChangePoke data={item} />
                 <br />
                 {!matchesWidth && (
-                  <Button fluid={true} text='Catch!' type='primary' />
+                  <Button
+                    fluid={true}
+                    text='Catch!'
+                    type='primary'
+                    onClick={() => onCatchPokemon(item)}
+                    loading={loading}
+                  />
                 )}
               </>
-            </Col1>
-            <Col2>
+            </div>
+            <div>
               <PokemonElement type='Types' data={item.types} />
               <br />
               <PokemonElement type='Moves' data={item.moves} />
               <br />
               <Statistic data={item} />
-            </Col2>
-            {matchesWidth && <FloatingActionButton />}
+            </div>
+            {matchesWidth && (
+              <FloatingActionButton
+                onClick={() => onCatchPokemon(item)}
+                loading={loading}
+              />
+            )}
           </Container>
+          <Modal
+            ref={modalRef}
+            image={isGetPokemon.img}
+            title={isGetPokemon.title}
+            buttonText={isGetPokemon.buttonText}>
+            <ModalText>{isGetPokemon.message}</ModalText>
+            {isGetPokemon.img === 1 ? (
+              <InputCustom
+                errorMsg={errorMsg}
+                placeholder='Enter a nickname for your item'
+                value={nickName}
+                onChange={(evt) => setNickName(evt.target.value)}
+              />
+            ) : null}
+            <Space>
+              <Button
+                loading={loadingModal}
+                type='primary'
+                text={isGetPokemon.buttonText}
+                fluid={true}
+                onClick={() => onSavePokemonToList(item)}
+              />
+              <Button
+                loading={loadingModal}
+                type='negative'
+                text='Cancel'
+                fluid={true}
+                onClick={() => modalRef.current.close()}
+              />
+            </Space>
+          </Modal>
+          <Conffeti onFire={onFire} />
         </div>
       )}
     </>

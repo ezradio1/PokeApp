@@ -17,7 +17,7 @@ const Progress = styled.div`
   background-color: blue;
   background-color: ${(props) =>
     props.value <= 33 ? '#FF0D0D' : props.value >= 66 ? '#69B34C' : '#FF8E15'};
-  width: ${(props) => `${props.value}%`};
+  width: ${(props) => `${Number((props.value / props.max) * 100)}%`};
   animation: progress 700ms ease-in 1;
   @keyframes progress {
     from {
@@ -31,11 +31,10 @@ const Value = styled.p`
   font-size: 15px;
 `;
 const ProgressBar = (props) => {
-  console.log(props.value);
   return (
     <Container>
       <ContainerProgress>
-        <Progress type={props.type} value={props.value} max='100' />
+        <Progress type={props.type} value={props.value} max={props.max} />
       </ContainerProgress>
       <Value>{props.value}</Value>
     </Container>
