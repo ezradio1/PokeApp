@@ -1,6 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import myAxios from '../myAxios';
 import { useNavigate } from 'react-router-dom';
+import styled from '@emotion/styled';
+import LoadingIcon from '../assets/icon/loading-2.svg';
 
 // component
 import Pagination from '../components/Pagination';
@@ -8,6 +10,14 @@ import PokemonCard from '../components/PokemonCard';
 import { PokemonListContext } from '../context/PokemonListContext';
 
 import * as URL from '../const/urlRouter';
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const LoadingTag = styled.img`
+  width: 100px;
+`;
 
 const PokemonList = () => {
   let navigate = useNavigate();
@@ -45,7 +55,11 @@ const PokemonList = () => {
     <>
       <h1>PokeDex</h1>
       {list.length === 0 ? (
-        <p>loading...</p>
+        <LoadingContainer>
+          <div>
+            <LoadingTag src={LoadingIcon} />
+          </div>
+        </LoadingContainer>
       ) : (
         <div>
           <PokemonCard data={list} onClick={(val) => onClickPokemon(val)} />

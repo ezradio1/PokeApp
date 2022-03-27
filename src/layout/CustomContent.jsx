@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import PokemonList from '../page/PokemonList';
 import DetailPokemon from '../page/DetailPokemon';
 import MyPokemonList from '../page/MyPokemonList';
+import NotFound from '../page/NotFound';
 
 const CustomContent = () => {
   let navigate = useNavigate();
@@ -34,6 +35,7 @@ const CustomContent = () => {
         <Route path={URL.POKEMON_LIST} element={<PokemonList />} />
         <Route path={URL.POKEMON_DETAIL(':id')} element={<DetailPokemon />} />
         <Route path={URL.MY_POKEMON} element={<MyPokemonList />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </Container>
   );

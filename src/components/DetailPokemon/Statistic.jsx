@@ -48,8 +48,7 @@ const Statistic = (props) => {
     data[5].base_stat,
   ];
 
-  const max = Math.max(...statistic);
-  console.log(max);
+  const max = Math.max(...statistic) > 100 ? Math.max(...statistic) : 100;
   return (
     <>
       <Title>Base Statistic</Title>

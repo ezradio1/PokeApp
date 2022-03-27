@@ -1,9 +1,9 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from '@emotion/styled';
-import success from '../assets/img/success.svg';
-import sad from '../assets/img/sad.svg';
+import CloseIcon from '../assets/icon/close.svg';
 import Button from '../components/Button';
+
 const ModalBackDrop = styled.div`
   position: fixed;
   height: 100vh;
@@ -16,7 +16,7 @@ const ModalBackDrop = styled.div`
 const ModalContentWraper = styled.div`
   z-index: 10000;
   position: fixed;
-  max-width: 20vw;
+  width: 20vw;
   height: fit-content;
   background: #fff;
   margin: auto;
@@ -28,7 +28,11 @@ const ModalContentWraper = styled.div`
   border-radius: 5px;
 
   @media (max-width: 960px) {
-    max-width: 75vw;
+    width: 40vw;
+  }
+
+  @media (max-width: 480px) {
+    width: 75vw;
   }
 `;
 
@@ -37,7 +41,7 @@ const ImgContainer = styled.div`
   justify-content: center;
 `;
 const ModalImg = styled.img`
-  width: 60%;
+  width: 150px;
 `;
 const ModalTitle = styled.div`
   margin-bottom: 5px;
@@ -46,6 +50,12 @@ const ModalTitle = styled.div`
   text-transform: uppercase;
   text-align: center;
   margin: 20px 0;
+`;
+
+const CloseButtonContainer = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
 `;
 const Modal = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
@@ -117,8 +127,16 @@ const Modal = forwardRef((props, ref) => {
                     duration: 0.3,
                   },
                 }}>
+                <CloseButtonContainer>
+                  <Button
+                    onlyIcon={true}
+                    icon={CloseIcon}
+                    type='transparent'
+                    onClick={() => setOpen(false)}
+                  />
+                </CloseButtonContainer>
                 <ImgContainer>
-                  <ModalImg src={props.image === 1 ? success : sad} />
+                  <ModalImg src={props.image} />
                 </ImgContainer>
                 <ModalTitle>{props.title}</ModalTitle>
                 {props.children}

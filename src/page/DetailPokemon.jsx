@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { WidthContext } from '../context/WidthContext';
 import { MyPokemonContext } from '../context/MyPokemonContext';
 import ArrowLeft from '../assets/icon/arrow-left.svg';
-
+import success from '../assets/img/success.svg';
+import sad from '../assets/img/sad.svg';
 //components
 import Avatar from '../components/DetailPokemon/Avatar';
 import InfoDetail from '../components/DetailPokemon/InfoDetail';
@@ -18,7 +19,6 @@ import Button from '../components/Button';
 import Conffeti from '../components/Conffeti';
 import Modal from '../components/Modal';
 import InputCustom from '../components/InputCustom';
-import Space from '../components/Space';
 
 const Container = styled.div`
   display: grid;
@@ -84,7 +84,6 @@ const DetailPokemon = () => {
     if (nickName === '') {
       setErrorMsg(`You must enter a nickname!`);
     } else {
-      console.log(data);
       const checkUnique =
         myPokemon.length > 0 ? onCheckUniqNickName(nickName, myPokemon) : true;
       if (checkUnique) {
@@ -113,8 +112,7 @@ const DetailPokemon = () => {
     setLoading(true);
     setNickName('');
     setTimeout(() => {
-      // const getRandom = Math.floor(Math.random() * 2);
-      const getRandom = 1;
+      const getRandom = Math.floor(Math.random() * 2);
       var data;
       if (getRandom === 1) {
         data = {
@@ -184,7 +182,7 @@ const DetailPokemon = () => {
           </Container>
           <Modal
             ref={modalRef}
-            image={isGetPokemon.img}
+            image={isGetPokemon.img === 1 ? success : sad}
             title={isGetPokemon.title}
             buttonText={isGetPokemon.buttonText}>
             <ModalText>{isGetPokemon.message}</ModalText>
@@ -196,22 +194,17 @@ const DetailPokemon = () => {
                 onChange={(evt) => setNickName(evt.target.value)}
               />
             ) : null}
-            <Space>
-              <Button
-                loading={loadingModal}
-                type='primary'
-                text={isGetPokemon.buttonText}
-                fluid={true}
-                onClick={() => onSavePokemonToList(item)}
-              />
-              <Button
-                loading={loadingModal}
-                type='negative'
-                text='Cancel'
-                fluid={true}
-                onClick={() => modalRef.current.close()}
-              />
-            </Space>
+            <Button
+              loading={loadingModal}
+              type='primary'
+              text={isGetPokemon.buttonText}
+              fluid={true}
+              onClick={
+                isGetPokemon.img === 1
+                  ? () => onSavePokemonToList(item)
+                  : () => modalRef.current.close()
+              }
+            />
           </Modal>
           <Conffeti onFire={onFire} />
         </div>
