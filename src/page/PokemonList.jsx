@@ -1,16 +1,28 @@
 import React, { useEffect, useContext } from 'react';
-import myAxios from '../myAxios';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import LoadingIcon from '../assets/icon/loading-2.svg';
+import { MyPokemonContext } from '../context/MyPokemonContext';
+import { PokemonListContext } from '../context/PokemonListContext';
 
 // component
 import Pagination from '../components/Pagination';
 import PokemonCard from '../components/PokemonCard';
-import { PokemonListContext } from '../context/PokemonListContext';
+import Chip from '../components/Chip';
+import Space from '../components/Space';
 
 import * as URL from '../const/urlRouter';
 
+const HeaderText = styled.div`
+  font-size: 30px;
+  font-weight: 700;
+  @media (max-width: 480px) {
+    font-size: 15px;
+  }
+  @media (max-width: 960px) {
+    font-size: 20px;
+  }
+`;
 const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -21,39 +33,29 @@ const LoadingTag = styled.img`
 
 const PokemonList = () => {
   let navigate = useNavigate();
-  const [list, setList, pagination, setPagination] =
+  const [list, setList, getAllData, pagination] =
     useContext(PokemonListContext);
+  const [myPokemon] = useContext(MyPokemonContext);
 
   useEffect(() => {
     if (list.length === 0) {
-      getData();
+      getAllData();
     }
   }, []);
 
-  const getData = async (url = 'pokemon') => {
-    await myAxios.get(url).then((res) => {
-      const data = res.data;
-      const results = res.data.results;
-      setPagination(data);
-      results.map(async (element, key) => {
-        await myAxios.get(`pokemon/${element.name}`).then((res) => {
-          const newData = res.data;
-          setList((prev) => [...prev, newData]);
-        });
-      });
-    });
-  };
-
   const onClickPagination = async (url) => {
     setList([]);
-    await getData(url);
+    await getAllData(url);
   };
   const onClickPokemon = (data) => {
     navigate(URL.POKEMON_DETAIL(data.id));
   };
   return (
     <>
-      <h1>PokeDex</h1>
+      <Space justify='space-between' align='center'>
+        <HeaderText>Pokemon Dex</HeaderText>
+        <Chip color='#66BB6A' text={`TOTAL OWNED : ${myPokemon.length}`} />
+      </Space>
       {list.length === 0 ? (
         <LoadingContainer>
           <div>

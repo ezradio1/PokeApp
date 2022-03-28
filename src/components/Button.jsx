@@ -28,7 +28,7 @@ const ButtonCustom = styled.div`
       : props.type === 'negative'
       ? '#F70000'
       : props.type === 'negative-1'
-      ? '#DC91A0'
+      ? '#CC2626'
       : props.type === 'transparent'
       ? 'transparent'
       : '#F4F4F4'};
@@ -53,6 +53,7 @@ const Button = (props) => {
   return (
     <>
       <ButtonCustom
+        data-testid='button'
         onlyIcon={props.onlyIcon}
         loading={props.loading}
         fluid={props.fluid}

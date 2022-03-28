@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import Chip from './Chip';
+import Chip from '../Chip';
 import { motion } from 'framer-motion';
 
 const Title = styled.div`
@@ -11,6 +11,7 @@ const Title = styled.div`
 const ChipContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: 5px;
 `;
 const PokemonElement = (props) => {
   return (

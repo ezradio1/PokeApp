@@ -7,13 +7,13 @@ import { MyPokemonProvider } from './context/MyPokemonContext';
 function App() {
   return (
     <div className='App'>
-      <WidthProvider>
+      <MyPokemonProvider>
         <PokemonListProvider>
-          <MyPokemonProvider>
+          <WidthProvider>
             <CustomLayout />
-          </MyPokemonProvider>
+          </WidthProvider>
         </PokemonListProvider>
-      </WidthProvider>
+      </MyPokemonProvider>
     </div>
   );
 }

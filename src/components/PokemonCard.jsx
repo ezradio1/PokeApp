@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import getColor from '../const/getColor';
+import Space from '../components/Space';
 
 const Container = styled.div`
   display: grid;
@@ -51,7 +52,7 @@ const ContainerName = styled.p`
 `;
 
 const ContainerNumber = styled.p`
-  color: #eae8e7;
+  color: #d4d4d4;
   text-align: center;
   position: relative;
   font-size: 6.8vw;
@@ -68,16 +69,26 @@ const ContainerNumber = styled.p`
 
 const ContainerType = styled.p`
   font-weight: 600;
-  text-align: center;
   line-height: 10px;
   font-size: 12px;
   color: ${(props) => getColor(props.type)};
+  padding-right: 5px;
+  border-right: 1px solid black;
+`;
+
+const ContainerTotalOwned = styled.p`
+  line-height: 10px;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: capitalize;
+  color: #4f5257;
 `;
 const PokemonCard = ({ data, onClick }) => {
   return (
     <Container>
       {data.map((el, key) => (
         <motion.div
+          key={key}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2, delay: Number(key / 20) }}>
@@ -90,9 +101,15 @@ const PokemonCard = ({ data, onClick }) => {
               alt=''
             />
             <ContainerName>{el.name}</ContainerName>
-            <ContainerType type={el.types[0].type.name}>
-              {el.types[0].type.name}
-            </ContainerType>
+            <Space justify='center'>
+              <ContainerType type={el.types[0].type.name}>
+                {el.types[0].type.name}
+              </ContainerType>
+
+              <ContainerTotalOwned>
+                Owned : {el.total_owned}
+              </ContainerTotalOwned>
+            </Space>
           </ContainerCard>
         </motion.div>
       ))}

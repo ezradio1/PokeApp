@@ -6,8 +6,7 @@
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@mverissimoo/emotion-grid": "^1.8.0",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.4",
+    "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
     "emotion": "^11.0.0",
@@ -43,5 +42,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react": "^12.1.4",
+    "jest-dom": "^4.0.0",
+    "react-test-render": "^1.1.2"
   }
 }

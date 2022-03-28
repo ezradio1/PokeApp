@@ -10,9 +10,8 @@ const Container = styled.div`
   color: #fff;
   font-weight: 600;
   font-size: 12px;
-  margin-right: 10px;
-  margin-top: 5px;
   text-transform: capitalize;
+  height: 20px;
 `;
 const Chip = (props) => {
   return <Container color={props.color}>{props.text}</Container>;

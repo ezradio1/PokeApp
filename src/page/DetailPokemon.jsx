@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { WidthContext } from '../context/WidthContext';
 import { MyPokemonContext } from '../context/MyPokemonContext';
+import { PokemonListContext } from '../context/PokemonListContext';
 import ArrowLeft from '../assets/icon/arrow-left.svg';
 import success from '../assets/img/success.svg';
 import sad from '../assets/img/sad.svg';
@@ -49,7 +50,7 @@ const ModalText = styled.div`
 const DetailPokemon = () => {
   const [matchesWidth] = useContext(WidthContext);
   const [myPokemon, setMyPokemon] = useContext(MyPokemonContext);
-
+  const [, setList, getAllData] = useContext(PokemonListContext);
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
@@ -64,6 +65,12 @@ const DetailPokemon = () => {
       getData();
     }
   }, []);
+
+  useEffect(() => {
+    setList([]);
+    getAllData();
+  }, [myPokemon]);
+
   const onFire = useRef(null);
   const modalRef = useRef();
 
@@ -101,6 +108,7 @@ const DetailPokemon = () => {
           localStorage.setItem('myPokemon', JSON.stringify(newData));
           modalRef.current.close();
           setLoadingModal(false);
+          // getAllData();
         }, 800);
       } else {
         setErrorMsg(`You've used this nickname before!`);
@@ -126,14 +134,14 @@ const DetailPokemon = () => {
         data = {
           img: getRandom,
           title: 'very sad!!',
-          buttonText: 'No, problem',
+          buttonText: 'No problem',
           message: 'You failed to get this item!',
         };
       }
       setIsGetPokemon(data);
       modalRef.current.open();
       setLoading(false);
-    }, 1500);
+    }, 800);
   };
   return (
     <>
@@ -161,7 +169,7 @@ const DetailPokemon = () => {
                     text='Catch!'
                     type='primary'
                     onClick={() => onCatchPokemon(item)}
-                    loading={loading}
+                    loading={loading ? 1 : 0}
                   />
                 )}
               </>
@@ -176,7 +184,7 @@ const DetailPokemon = () => {
             {matchesWidth && (
               <FloatingActionButton
                 onClick={() => onCatchPokemon(item)}
-                loading={loading}
+                loading={loading ? 1 : 0}
               />
             )}
           </Container>
@@ -195,7 +203,7 @@ const DetailPokemon = () => {
               />
             ) : null}
             <Button
-              loading={loadingModal}
+              loading={loadingModal ? 1 : 0}
               type='primary'
               text={isGetPokemon.buttonText}
               fluid={true}

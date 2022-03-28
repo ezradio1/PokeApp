@@ -1,5 +1,6 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { MyPokemonContext } from '../context/MyPokemonContext';
+import { PokemonListContext } from '../context/PokemonListContext';
 import styled from '@emotion/styled';
 import NoDataImg from '../assets/img/nodata.svg';
 import { motion } from 'framer-motion';
@@ -8,6 +9,17 @@ import { motion } from 'framer-motion';
 import PokemonCard from '../components/MyPokemon/PokemonCard';
 import Modal from '../components/Modal';
 import Button from '../components/Button';
+
+const HeaderText = styled.div`
+  font-size: 30px;
+  font-weight: 700;
+  @media (max-width: 480px) {
+    font-size: 15px;
+  }
+  @media (max-width: 960px) {
+    font-size: 20px;
+  }
+`;
 
 const ModalText = styled.div`
   text-align: center;
@@ -32,8 +44,9 @@ const NoDataText = styled.div`
   font-weight: 600;
 `;
 const MyPokemonList = () => {
-  const [loading, setLoading] = useState(false);
+  const [, setList, getAllData] = useContext(PokemonListContext);
   const [myPokemon, setMyPokemon] = useContext(MyPokemonContext);
+  const [loading, setLoading] = useState(false);
   const [currItem, setCurrItem] = useState({});
   const modalRef = useRef();
 
@@ -41,7 +54,13 @@ const MyPokemonList = () => {
     modalRef.current.open();
     setCurrItem(item);
   };
-  const onReleasePokemon = () => {
+
+  useEffect(() => {
+    setList([]);
+    getAllData();
+  }, [myPokemon]);
+
+  const onReleasePokemon = async () => {
     setLoading(true);
     setTimeout(() => {
       const newData = myPokemon.filter((e) => {
@@ -55,7 +74,7 @@ const MyPokemonList = () => {
   };
   return (
     <>
-      <h1>My Pokemon</h1>
+      <HeaderText>My Pokemon</HeaderText>
       {myPokemon.length === 0 && (
         <ImageContainer>
           <motion.div>
@@ -72,7 +91,7 @@ const MyPokemonList = () => {
         <ModalText>Are you sure want to delete this item ?</ModalText>
 
         <Button
-          loading={loading}
+          loading={loading ? 1 : 0}
           type='negative'
           text='Delete'
           fluid={true}

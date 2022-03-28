@@ -77,12 +77,16 @@ const Navbar = () => {
           <NavLogo src={PokeLogo} />
           {!matchesWidth && (
             <MenuContainer>
-              <ItemMenu onClick={() => onMovePage(URL.POKEMON_LIST)}>
+              <ItemMenu
+                onClick={() => onMovePage(URL.POKEMON_LIST)}
+                data-testid='item-nav-1'>
                 <ItemLogo src={ListLogo} />
-                Pokemon List
+                Pokemon Dex
               </ItemMenu>
               <VerticalSeparator />
-              <ItemMenu onClick={() => onMovePage(URL.MY_POKEMON)}>
+              <ItemMenu
+                onClick={() => onMovePage(URL.MY_POKEMON)}
+                data-testid='item-nav-2'>
                 <ItemLogo src={ContainerLogo} />
                 My Pokemon
               </ItemMenu>
